@@ -1,0 +1,23 @@
+.footer {
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.links {
+    margin: 0 1.5rem;
+    padding: 0 0.5rem 0.5rem;
+    color: #ffffff;
+    border-bottom: 3px solid transparent;
+}
+
+.links:hover {
+    color: #ed6c02;
+    border-bottom: 3px solid #ed6c02;
+    transition: all 0.3s ease-in;
+}
