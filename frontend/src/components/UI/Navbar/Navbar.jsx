@@ -1,10 +1,16 @@
+import { useState } from "react";
+
 import classes from "./Navbar.module.css";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
 
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { logout } from "features/authSlice";
 
 const logoStyles = {
     fontSize: 35,
@@ -27,6 +33,17 @@ const credentialsButtonsStyles = {
 };
 
 function Navbar() {
+    const dispatch = useDispatch();
+
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const [redirect, setRedirect] = useState(false);
+
+    const logoutUser = () => {
+        dispatch(logout());
+        setRedirect(true);
+    };
+
     return (
         <>
             <header className={classes.header}>
@@ -45,36 +62,42 @@ function Navbar() {
                 </nav>
 
                 <div className={classes.actions}>
-                    <NavLink to="/login" className={classes.login}>
-                        <Button
-                            variant="outlined"
-                            color="sailorBlue"
-                            sx={{ ...credentialsButtonsStyles }}>
-                            Login
-                        </Button>
-                    </NavLink>
-                    <NavLink to="/register" className={classes.signup}>
-                        <Button
-                            variant="contained"
-                            color="sailorBlue"
-                            sx={{
-                                color: "white.main",
-                                ...credentialsButtonsStyles,
-                            }}>
-                            Signup
-                        </Button>
-                    </NavLink>
-
-                    {/* <NavLink to="/" className={classes.login}>
-                        <Button
-                            variant="outlined"
-                            color="sailorBlue"
-                            sx={{ ...credentialsButtonsStyles }}>
-                            Logout
-                        </Button>
-                    </NavLink> */}
+                    {!isAuthenticated ? (
+                        <>
+                            <NavLink to="/login" className={classes.login}>
+                                <Button
+                                    variant="outlined"
+                                    color="sailorBlue"
+                                    sx={{ ...credentialsButtonsStyles }}>
+                                    Login
+                                </Button>
+                            </NavLink>
+                            <NavLink to="/register" className={classes.signup}>
+                                <Button
+                                    variant="contained"
+                                    color="sailorBlue"
+                                    sx={{
+                                        color: "white.main",
+                                        ...credentialsButtonsStyles,
+                                    }}>
+                                    Signup
+                                </Button>
+                            </NavLink>
+                        </>
+                    ) : (
+                        <NavLink to="/" className={classes.login}>
+                            <Button
+                                variant="outlined"
+                                color="sailorBlue"
+                                sx={{ ...credentialsButtonsStyles }}
+                                onClick={logoutUser}>
+                                Logout
+                            </Button>
+                        </NavLink>
+                    )}
                 </div>
             </header>
+            {redirect && <Navigate to="/" />}
         </>
     );
 }

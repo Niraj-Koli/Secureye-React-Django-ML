@@ -1,3 +1,11 @@
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+
+import { resetPassword } from "features/authActions";
+
 import {
     Container,
     Box,
@@ -30,6 +38,36 @@ const resetButtonStyles = {
 };
 
 function ResetPassword() {
+    const [requestSent, setRequestSent] = useState(false);
+
+    const [formData, setFormData] = useState({
+        email: "",
+    });
+
+    const navigate = useNavigate();
+
+    const { email } = formData;
+
+    const dispatch = useDispatch();
+
+    const changeHandler = (event) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        dispatch(resetPassword(email));
+        setRequestSent(true);
+    };
+
+    if (requestSent) {
+        navigate("/");
+    }
+
     return (
         <>
             <Container component="main" maxWidth="sm">
@@ -38,7 +76,7 @@ function ResetPassword() {
                         Reset Password
                     </Typography>
 
-                    <Box component="form" noValidate>
+                    <Box component="form" noValidate onSubmit={submitHandler}>
                         <TextField
                             margin="normal"
                             required
@@ -48,6 +86,8 @@ function ResetPassword() {
                             id="email"
                             type="email"
                             color="sailorBlue"
+                            value={email}
+                            onChange={changeHandler}
                         />
 
                         <Button

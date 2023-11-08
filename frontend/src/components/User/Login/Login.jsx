@@ -8,14 +8,13 @@ import {
     Link,
     Typography,
     Button,
-    InputAdornment,
-    IconButton,
-    FormControl,
-    OutlinedInput,
-    InputLabel,
 } from "@mui/material";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { login } from "features/authActions";
 
 const mainCardStyles = {
     boxShadow: 3,
@@ -39,13 +38,35 @@ const loginButtonStyles = {
 };
 
 function Login() {
-    const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
 
-    const clickShowPasswordHandler = () => setShowPassword((show) => !show);
+    const navigate = useNavigate();
 
-    const mouseDownPasswordHandler = (event) => {
-        event.preventDefault();
+    const { email, password } = formData;
+
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const dispatch = useDispatch();
+
+    const changeHandler = (event) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
     };
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        dispatch(login({ email, password }));
+    };
+
+    if (isAuthenticated) {
+        navigate("/");
+    }
 
     return (
         <>
@@ -55,7 +76,7 @@ function Login() {
                         Login
                     </Typography>
 
-                    <Box component="form" noValidate>
+                    <Box component="form" noValidate onSubmit={submitHandler}>
                         <TextField
                             margin="normal"
                             required
@@ -65,43 +86,22 @@ function Login() {
                             id="email"
                             type="email"
                             color="sailorBlue"
+                            value={email}
+                            onChange={changeHandler}
                         />
 
-                        <FormControl
+                        <TextField
                             margin="normal"
                             required
                             fullWidth
+                            label="Password"
                             name="password"
                             id="password"
                             type="password"
                             color="sailorBlue"
-                            variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">
-                                Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password"
-                                type={showPassword ? "text" : "password"}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={clickShowPasswordHandler}
-                                            onMouseDown={
-                                                mouseDownPasswordHandler
-                                            }
-                                            edge="end">
-                                            {showPassword ? (
-                                                <VisibilityOff color="sailorBlue" />
-                                            ) : (
-                                                <Visibility color="sailorBlue" />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                            />
-                        </FormControl>
+                            value={password}
+                            onChange={changeHandler}
+                        />
 
                         <Button
                             color="sailorBlue"

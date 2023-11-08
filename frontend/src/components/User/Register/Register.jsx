@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { signup } from "features/authActions";
+
 import {
     Container,
     Box,
@@ -8,14 +14,7 @@ import {
     Link,
     Typography,
     Button,
-    InputAdornment,
-    IconButton,
-    FormControl,
-    OutlinedInput,
-    InputLabel,
 } from "@mui/material";
-
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const mainCardStyles = {
     boxShadow: 3,
@@ -23,6 +22,7 @@ const mainCardStyles = {
     px: 4,
     py: 4,
     marginTop: 8,
+    marginBottom: 8,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -39,13 +39,40 @@ const loginButtonStyles = {
 };
 
 function Register() {
-    const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
-    const clickShowPasswordHandler = () => setShowPassword((show) => !show);
+    const [accountCreated, setAccountCreated] = useState(false);
 
-    const mouseDownPasswordHandler = (event) => {
-        event.preventDefault();
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const { name, email, password } = formData;
+
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const dispatch = useDispatch();
+
+    const changeHandler = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     };
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        dispatch(signup({ name, email, password }));
+        setAccountCreated(true);
+    };
+
+    if (isAuthenticated) {
+        navigate("/");
+    }
+
+    if (accountCreated) {
+        navigate("/login");
+    }
 
     return (
         <>
@@ -55,15 +82,17 @@ function Register() {
                         Signup
                     </Typography>
 
-                    <Box component="form" noValidate>
+                    <Box component="form" noValidate onSubmit={submitHandler}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
                             label="Username"
-                            name="username"
-                            id="username"
+                            name="name"
+                            id="name"
                             color="sailorBlue"
+                            value={name}
+                            onChange={changeHandler}
                         />
 
                         <TextField
@@ -74,42 +103,23 @@ function Register() {
                             name="email"
                             id="email"
                             color="sailorBlue"
+                            value={email}
+                            onChange={changeHandler}
                         />
 
-                        <FormControl
+                        <TextField
                             margin="normal"
                             required
                             fullWidth
+                            label="Password"
                             name="password"
                             id="password"
+                            type="password"
                             color="sailorBlue"
-                            variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">
-                                Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password"
-                                type={showPassword ? "text" : "password"}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={clickShowPasswordHandler}
-                                            onMouseDown={
-                                                mouseDownPasswordHandler
-                                            }
-                                            edge="end">
-                                            {showPassword ? (
-                                                <VisibilityOff color="sailorBlue" />
-                                            ) : (
-                                                <Visibility color="sailorBlue" />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                            />
-                        </FormControl>
+                            variant="outlined"
+                            value={password}
+                            onChange={changeHandler}
+                        />
 
                         <Button
                             color="sailorBlue"

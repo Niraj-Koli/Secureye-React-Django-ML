@@ -1,18 +1,12 @@
 import { useState } from "react";
 
-import {
-    Container,
-    Box,
-    Typography,
-    Button,
-    InputAdornment,
-    IconButton,
-    FormControl,
-    OutlinedInput,
-    InputLabel,
-} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+
+import { resetPasswordConfirm } from "features/authActions";
+
+import { Container, Box, Typography, Button, TextField } from "@mui/material";
 
 const mainCardStyles = {
     boxShadow: 3,
@@ -36,24 +30,43 @@ const updatePasswordButtonStyles = {
 };
 
 function UpdatePassword() {
-    const [showNewPassword, setShowNewPassword] = useState(false);
-    const [showNewConfirmPassword, setShowNewConfirmPassword] = useState(false);
+    const { uid, token } = useParams();
 
-    const clickShowNewPasswordHandler = () => {
-        setShowNewPassword((show) => !show);
+    const navigate = useNavigate();
+
+    const [requestSent, setRequestSent] = useState(false);
+
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const dispatch = useDispatch();
+
+    const newPasswordChangeHandler = (event) => {
+        setNewPassword(event.target.value);
     };
 
-    const clickShowNewConfirmPasswordHandler = () => {
-        setShowNewConfirmPassword((show) => !show);
+    const confirmPasswordChangeHandler = (event) => {
+        setConfirmPassword(event.target.value);
     };
 
-    const mouseDownNewPasswordHandler = (event) => {
+    const submitHandler = (event) => {
         event.preventDefault();
+
+        dispatch(
+            resetPasswordConfirm({
+                uid,
+                token,
+                new_password: newPassword,
+                re_new_password: confirmPassword,
+            })
+        );
+
+        setRequestSent(true);
     };
 
-    const mouseDownNewConfirmPasswordHandler = (event) => {
-        event.preventDefault();
-    };
+    if (requestSent) {
+        navigate("/");
+    }
 
     return (
         <>
@@ -63,84 +76,34 @@ function UpdatePassword() {
                         Update Password
                     </Typography>
 
-                    <Box component="form" noValidate>
-                        <FormControl
+                    <Box component="form" noValidate onSubmit={submitHandler}>
+                        <TextField
                             margin="normal"
                             required
                             fullWidth
+                            label="Password"
                             name="password"
                             id="password"
                             type="password"
                             color="sailorBlue"
-                            variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">
-                                New Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password"
-                                type={showNewPassword ? "text" : "password"}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={
-                                                clickShowNewPasswordHandler
-                                            }
-                                            onMouseDown={
-                                                mouseDownNewPasswordHandler
-                                            }
-                                            edge="end">
-                                            {showNewPassword ? (
-                                                <VisibilityOff color="sailorBlue" />
-                                            ) : (
-                                                <Visibility color="sailorBlue" />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="New Password"
-                            />
-                        </FormControl>
+                            variant="outlined"
+                            value={newPassword}
+                            onChange={newPasswordChangeHandler}
+                        />
 
-                        <FormControl
+                        <TextField
                             margin="normal"
                             required
                             fullWidth
-                            name="password"
-                            id="password"
+                            label="Confirm Password"
+                            name="confirmpassword"
+                            id="confirmpassword"
                             type="password"
                             color="sailorBlue"
-                            variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">
-                                Confirm New Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password"
-                                type={
-                                    showNewConfirmPassword ? "text" : "password"
-                                }
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={
-                                                clickShowNewConfirmPasswordHandler
-                                            }
-                                            onMouseDown={
-                                                mouseDownNewConfirmPasswordHandler
-                                            }
-                                            edge="end">
-                                            {showNewConfirmPassword ? (
-                                                <VisibilityOff color="sailorBlue" />
-                                            ) : (
-                                                <Visibility color="sailorBlue" />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Confirm New Password"
-                            />
-                        </FormControl>
+                            variant="outlined"
+                            value={confirmPassword}
+                            onChange={confirmPasswordChangeHandler}
+                        />
 
                         <Button
                             color="sailorBlue"
