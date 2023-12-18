@@ -1,0 +1,56 @@
+.footer {
+    background: cyan;
+    margin-top: 2rem;
+}
+
+.footerContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 2fr));
+    gap: 15rem;
+}
+
+.box {
+    position: relative;
+    left: 2rem;
+}
+
+.heading {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: black;
+}
+
+.desc {
+    line-height: 1.5;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: black;
+    padding: 1rem 0;
+}
+
+.socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.icons {
+    border-radius: 1rem;
+    padding: 0.5rem;
+    color: black;
+    background: #eee;
+}
+
+.icons:hover {
+    background: black;
+    color: #fff;
+}
+
+.links {
+    display: block;
+    color: black;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 1rem 0;
+}

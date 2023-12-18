@@ -2,8 +2,6 @@ import { useEffect } from "react";
 
 import { Helmet } from "react-helmet";
 
-import Navbar from "components/UI/Navbar/Navbar";
-
 import { useDispatch } from "react-redux";
 
 import { checkAuthenticated, loadUser } from "features/authActions";
@@ -26,7 +24,6 @@ function Layout(props) {
                 />
             </Helmet>
 
-            <Navbar />
             <div>{props.children}</div>
         </>
     );

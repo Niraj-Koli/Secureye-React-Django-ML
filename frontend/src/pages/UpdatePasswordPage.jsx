@@ -4,7 +4,7 @@ import UpdatePassword from "components/User/UpdatePassword/UpdatePassword";
 function UpdatePasswordPage() {
     return (
         <>
-            <Layout title="Update Password Page">
+            <Layout title="Secureye | Update Password Page">
                 <UpdatePassword />
             </Layout>
         </>

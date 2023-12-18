@@ -1,30 +1,16 @@
-import { NavLink } from "react-router-dom";
+import styles from "./NotFound.module.css";
 
-import { Box, Paper, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
-const notFoundCardStyles = {
-    display: "flex",
-    justifyContent: "center",
-};
-
-const paperStyles = {
-    marginTop: 12,
-    fontSize: 20,
-    fontWeight: "600",
-    padding: 8,
-    width: "50%",
-    textAlign: "center",
-};
-
-const credentialsButtonsStyles = {
-    fontSize: "1.2rem",
-    fontWeight: "600",
-    marginTop: "3rem",
-    borderRadius: "0.5rem",
-    padding: "0.4rem 1.3rem",
+const homeButtonStyles = {
+    mt: 3,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    bgcolor: "black.main",
+    color: "white.main",
     ":hover": {
-        bgcolor: "warning.main",
         color: "white.main",
+        bgcolor: "warning.main",
         transition: "all 0.3s ease-in",
     },
 };
@@ -32,22 +18,23 @@ const credentialsButtonsStyles = {
 function NotFound() {
     return (
         <>
-            <Box sx={{ ...notFoundCardStyles }}>
-                <Paper elevation={3} square={false} sx={{ ...paperStyles }}>
-                    Oops ! The Page you are trying to access doesn't exists.
-                    <NavLink to="/">
-                        <Button
-                            variant="contained"
-                            color="sailorBlue"
-                            sx={{
-                                color: "white.main",
-                                ...credentialsButtonsStyles,
-                            }}>
-                            Home
-                        </Button>
-                    </NavLink>
-                </Paper>
-            </Box>
+            <div className={styles.mainCard}>
+                <div className={styles.notFoundCard}>
+                    <h1 className={styles.notFoundDescription}>
+                        Oops ! The Page you are trying to access doesn't exists.
+                    </h1>
+
+                    <Button
+                        href="/"
+                        sx={{ ...homeButtonStyles }}
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        size="large">
+                        Home
+                    </Button>
+                </div>
+            </div>
         </>
     );
 }

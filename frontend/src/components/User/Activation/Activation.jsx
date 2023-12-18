@@ -1,23 +1,14 @@
 import { useState, useEffect } from "react";
 
-import { Container, Box, Typography } from "@mui/material";
+import Navbar from "components/Navbar/Navbar";
+
+import styles from "./Activation.module.css";
 
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
 import { verify } from "features/authActions";
-
-const mainCardStyles = {
-    boxShadow: 3,
-    borderRadius: 2,
-    px: 4,
-    py: 4,
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-};
 
 function Activation() {
     const [verified, setVerified] = useState(false);
@@ -39,13 +30,17 @@ function Activation() {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Box sx={{ ...mainCardStyles }}>
-                    <Typography component="h1" variant="h4" gutterBottom>
+            <section className={styles.activationContainer}>
+                <Navbar />
+            </section>
+
+            <div className={styles.mainCard}>
+                <div className={styles.activationCard}>
+                    <h1 className={styles.activationHeading}>
                         Verify Your Account
-                    </Typography>
-                </Box>
-            </Container>
+                    </h1>
+                </div>
+            </div>
         </>
     );
 }

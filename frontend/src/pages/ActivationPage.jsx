@@ -4,7 +4,7 @@ import Activation from "components/User/Activation/Activation";
 function ActivationPage() {
     return (
         <>
-            <Layout title="Activation Page">
+            <Layout title="Secureye | Activation Page">
                 <Activation />
             </Layout>
         </>

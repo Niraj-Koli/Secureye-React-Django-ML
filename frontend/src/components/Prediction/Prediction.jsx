@@ -1,47 +1,22 @@
 import { useState, useRef } from "react";
 
-import Footer from "components/UI/Footer/Footer";
+import styles from "./Prediction.module.css";
 
-import {
-    Box,
-    Button,
-    CardActionArea,
-    CardMedia,
-    Grid,
-    Paper,
-} from "@mui/material";
+import Navbar from "components/Navbar/Navbar";
+import Footer from "components/Footer/Footer";
 
-import defaultImage from "./img/default.jpg";
+import { Button } from "@mui/material";
 
-const predictionMainStyles = {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "3rem",
-    marginBottom: "5rem",
-};
+import defaultImage from "static/img/default.jpg";
 
-const predictionCardStyles = {
-    width: "80%",
-};
-
-const buttonsGridStyles = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
-};
-
-const uploadImageButtonStyles = {
-    fontSize: "1.2rem",
+const uploadButtons = {
+    fontSize: "1.5rem",
     fontWeight: "600",
-    margin: "0 0.8rem",
-    backgroundColor: "sailorBlue.main",
+    m: "4rem",
+    backgroundColor: "black.main",
     color: "white.main",
     borderRadius: "0.5rem",
-    borderColor: "sailorBlue.main",
-    padding: "0.4rem 1.3rem",
+    borderColor: "black.main",
     ":hover": {
         borderColor: "warning.main",
         bgcolor: "warning.main",
@@ -50,53 +25,20 @@ const uploadImageButtonStyles = {
     },
 };
 
-const uploadVideoButtonStyles = {
-    fontSize: "1.2rem",
+const predictButton = {
+    fontSize: "1.5rem",
     fontWeight: "600",
-    backgroundColor: "sailorBlue.main",
+    m: "2rem 3rem",
+    backgroundColor: "black.main",
     color: "white.main",
-    margin: "5rem 0.8rem",
-    borderColor: "sailorBlue.main",
     borderRadius: "0.5rem",
-    padding: "0.4rem 1.3rem",
+    borderColor: "black.main",
     ":hover": {
         borderColor: "warning.main",
         bgcolor: "warning.main",
         color: "white.main",
         transition: "all 0.3s ease-in",
     },
-};
-
-const uploadWebCamButtonStyles = {
-    fontSize: "1.2rem",
-    fontWeight: "600",
-    backgroundColor: "sailorBlue.main",
-    color: "white.main",
-    margin: "0rem 0.8rem",
-    borderColor: "sailorBlue.main",
-    borderRadius: "0.5rem",
-    padding: "0.4rem 1.3rem",
-    ":hover": {
-        borderColor: "warning.main",
-        bgcolor: "warning.main",
-        color: "white.main",
-        transition: "all 0.3s ease-in",
-    },
-};
-
-const imageStyles = {
-    width: "100%",
-    maxWidth: "1200px",
-    height: "100%",
-    maxHeight: "500px",
-};
-
-const imageSectionStyles = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 1,
 };
 
 function Prediction() {
@@ -114,58 +56,91 @@ function Prediction() {
 
     return (
         <>
-            <Box sx={{ ...predictionMainStyles }}>
-                <Paper elevation={3} sx={{ ...predictionCardStyles }}>
-                    <Grid container>
-                        <Grid item xs={8} sx={{ ...imageSectionStyles }}>
-                            <CardActionArea onClick={imageClickHandler}>
-                                {image ? (
-                                    <CardMedia
-                                        sx={{ ...imageStyles }}
-                                        component="img"
-                                        image={URL.createObjectURL(image)}
-                                    />
-                                ) : (
-                                    <CardMedia
-                                        sx={{ ...imageStyles }}
-                                        component="img"
-                                        image={defaultImage}
-                                    />
-                                )}
-                            </CardActionArea>
-                        </Grid>
+            <section className={styles.predictionContainer}>
+                <Navbar />
+            </section>
 
-                        <Grid item xs={4} sx={{ ...buttonsGridStyles }}>
-                            <Button
-                                variant="outlined"
-                                component="label"
-                                sx={{ ...uploadImageButtonStyles }}>
-                                Image
-                                <input
-                                    type="file"
-                                    ref={imageRef}
-                                    onChange={imageChangeHandler}
-                                    hidden
+            <div className={styles.mainButtonsCard}>
+                <div className={styles.buttonsCard}>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{ ...uploadButtons }}>
+                        Image
+                        <input
+                            type="file"
+                            ref={imageRef}
+                            onChange={imageChangeHandler}
+                            hidden
+                        />
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{ ...uploadButtons }}>
+                        Video
+                        <input type="file" hidden />
+                    </Button>
+                </div>
+            </div>
+
+            <div className={styles.mainPredictionCard}>
+                <div className={styles.predictionCard}>
+                    <div className={styles.imageSection}>
+                        <input
+                            type="file"
+                            ref={imageRef}
+                            style={{ display: "none" }}
+                            onChange={imageChangeHandler}
+                        />
+                        <div
+                            className={styles.imageStyles}
+                            onClick={imageClickHandler}>
+                            {image ? (
+                                <img
+                                    src={URL.createObjectURL(image)}
+                                    alt="Prediction"
+                                    className={styles.image}
                                 />
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                component="label"
-                                sx={{ ...uploadVideoButtonStyles }}>
-                                Video
-                                <input type="file" hidden />
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                component="label"
-                                sx={{ ...uploadWebCamButtonStyles }}>
-                                WebCam
-                                <input type="file" hidden />
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Box>
+                            ) : (
+                                <img
+                                    src={defaultImage}
+                                    alt="Default"
+                                    className={styles.image}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.predictionCard}>
+                    <div className={styles.imageSection}>
+                        <input type="file" style={{ display: "none" }} />
+                        <div className={styles.imageStyles}>
+                            <img
+                                src={defaultImage}
+                                alt="Default"
+                                className={styles.image}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.predictionResultCard}>
+                <div className={styles.resultCard}>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{ ...predictButton }}>
+                        Predict
+                    </Button>
+                </div>
+                <div className={styles.resultItemsCard}>
+                    <h1 className={styles.predictedResultHeading}>
+                        <span>Predicted Objects</span>
+                    </h1>
+                </div>
+            </div>
 
             <Footer />
         </>

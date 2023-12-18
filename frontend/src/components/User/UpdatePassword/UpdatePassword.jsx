@@ -1,29 +1,26 @@
 import { useState } from "react";
 
+import styles from "./UpdatePassword.module.css";
+
 import { useNavigate, useParams } from "react-router-dom";
+
+import Navbar from "components/Navbar/Navbar";
 
 import { useDispatch } from "react-redux";
 
 import { resetPasswordConfirm } from "features/authActions";
 
-import { Container, Box, Typography, Button, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
-const mainCardStyles = {
-    boxShadow: 3,
-    borderRadius: 2,
-    px: 4,
-    py: 4,
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-};
-
-const updatePasswordButtonStyles = {
-    mt: 2.5,
-    mb: 2.5,
+const updateButtonStyles = {
+    mt: 1.5,
+    mb: 1,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    bgcolor: "black.main",
     color: "white.main",
     ":hover": {
+        color: "white.main",
         bgcolor: "warning.main",
         transition: "all 0.3s ease-in",
     },
@@ -70,14 +67,32 @@ function UpdatePassword() {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Box sx={{ ...mainCardStyles }}>
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Update Password
-                    </Typography>
+            <section className={styles.updateContainer}>
+                <Navbar />
+            </section>
 
-                    <Box component="form" noValidate onSubmit={submitHandler}>
+            <div className={styles.mainCard}>
+                <div className={styles.updateCard}>
+                    <h1 className={styles.updateHeading}>Update Password</h1>
+
+                    <form
+                        className={styles.form}
+                        noValidate
+                        onSubmit={submitHandler}>
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -85,13 +100,25 @@ function UpdatePassword() {
                             name="password"
                             id="password"
                             type="password"
-                            color="sailorBlue"
-                            variant="outlined"
+                            color="black"
                             value={newPassword}
                             onChange={newPasswordChangeHandler}
                         />
 
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -99,24 +126,22 @@ function UpdatePassword() {
                             name="confirmpassword"
                             id="confirmpassword"
                             type="password"
-                            color="sailorBlue"
-                            variant="outlined"
+                            color="black"
                             value={confirmPassword}
                             onChange={confirmPasswordChangeHandler}
                         />
 
                         <Button
-                            color="sailorBlue"
+                            sx={{ ...updateButtonStyles }}
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ ...updatePasswordButtonStyles }}
                             size="large">
                             Update
                         </Button>
-                    </Box>
-                </Box>
-            </Container>
+                    </form>
+                </div>
+            </div>
         </>
     );
 }

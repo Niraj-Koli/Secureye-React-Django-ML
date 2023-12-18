@@ -4,7 +4,7 @@ import ResetPassword from "components/User/ResetPassword/ResetPassword";
 function ResetPasswordPage() {
     return (
         <>
-            <Layout title="Reset Password Page">
+            <Layout title="Secureye | Reset Password Page">
                 <ResetPassword />
             </Layout>
         </>

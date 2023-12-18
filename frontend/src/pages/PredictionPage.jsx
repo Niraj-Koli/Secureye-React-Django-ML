@@ -4,7 +4,7 @@ import Prediction from "components/Prediction/Prediction";
 function PredictionPage() {
     return (
         <>
-            <Layout title="Prediction Page">
+            <Layout title="Secureye | Prediction Page">
                 <Prediction />
             </Layout>
         </>

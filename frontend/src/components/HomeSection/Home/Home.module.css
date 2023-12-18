@@ -1,0 +1,6 @@
+.backgroundImage {
+    height: 100vh;
+    background-image: url("static/img/HomeImage3.jpeg");
+    background-size: cover;
+}
+

@@ -1,0 +1,24 @@
+.mainCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.activationCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 2rem 4rem;
+    max-width: 55rem;
+    width: 100%;
+    margin: auto;
+    background-color: #ffffff;
+}
+
+.activationHeading {
+    margin: 1rem 0;
+    font-size: 3rem;
+}

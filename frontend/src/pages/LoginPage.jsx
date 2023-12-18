@@ -4,7 +4,7 @@ import Login from "components/User/Login/Login";
 function LoginPage() {
     return (
         <>
-            <Layout title="Login Page">
+            <Layout title="Secureye | Login Page">
                 <Login />
             </Layout>
         </>

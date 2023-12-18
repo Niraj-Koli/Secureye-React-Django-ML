@@ -2,39 +2,39 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import styles from "./Register.module.css";
+
+import Navbar from "components/Navbar/Navbar";
+
 import { useDispatch, useSelector } from "react-redux";
 
 import { signup } from "features/authActions";
 
-import {
-    Container,
-    Box,
-    Grid,
-    TextField,
-    Link,
-    Typography,
-    Button,
-} from "@mui/material";
+import { TextField, Link, Button } from "@mui/material";
 
-const mainCardStyles = {
-    boxShadow: 3,
-    borderRadius: 2,
-    px: 4,
-    py: 4,
-    marginTop: 8,
-    marginBottom: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-};
-
-const loginButtonStyles = {
-    mt: 2.5,
-    mb: 2.5,
+const signupButtonStyles = {
+    mt: 1.5,
+    mb: 1,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    bgcolor: "black.main",
     color: "white.main",
     ":hover": {
+        color: "white.main",
         bgcolor: "warning.main",
         transition: "all 0.3s ease-in",
+    },
+};
+
+const anchorsStyles = {
+    color: "black.main",
+    fontSize: "1.3rem",
+    textDecoration: "none",
+    mt: 1,
+    mx: "auto",
+    cursor: "pointer",
+    "&:hover": {
+        textDecoration: "underline",
     },
 };
 
@@ -76,38 +76,84 @@ function Register() {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Box sx={{ ...mainCardStyles }}>
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Signup
-                    </Typography>
+            <section className={styles.registerContainer}>
+                <Navbar />
+            </section>
 
-                    <Box component="form" noValidate onSubmit={submitHandler}>
+            <div className={styles.mainCard}>
+                <div className={styles.registerCard}>
+                    <h1 className={styles.registerHeading}>Signup</h1>
+
+                    <form
+                        className={styles.form}
+                        noValidate
+                        onSubmit={submitHandler}>
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
                             label="Username"
                             name="name"
                             id="name"
-                            color="sailorBlue"
+                            color="black"
                             value={name}
                             onChange={changeHandler}
                         />
 
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                    textTransform: "lowercase",
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
                             label="Email Address"
                             name="email"
                             id="email"
-                            color="sailorBlue"
+                            type="email"
+                            color="black"
                             value={email}
                             onChange={changeHandler}
                         />
 
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -115,36 +161,31 @@ function Register() {
                             name="password"
                             id="password"
                             type="password"
-                            color="sailorBlue"
-                            variant="outlined"
+                            color="black"
                             value={password}
                             onChange={changeHandler}
                         />
 
                         <Button
-                            color="sailorBlue"
+                            sx={{ ...signupButtonStyles }}
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ ...loginButtonStyles }}
                             size="large">
                             Register
                         </Button>
 
-                        <Grid container>
-                            <Grid item margin="auto">
-                                <Link
-                                    color="sailorBlue"
-                                    href="/login"
-                                    variant="body2"
-                                    underline="hover">
-                                    {"Already have an account? Login"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
+                        <div className={styles.linkContainer}>
+                            <Link
+                                sx={{ ...anchorsStyles }}
+                                href="/login"
+                                underline="hover">
+                                {"Already have an account? Login"}
+                            </Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </>
     );
 }

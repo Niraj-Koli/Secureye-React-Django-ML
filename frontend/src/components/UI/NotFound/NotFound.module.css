@@ -1,0 +1,24 @@
+.mainCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.notFoundCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    max-width: 70rem;
+    width: 100%;
+    margin: auto;
+    background-color: #ffffff;
+}
+
+.notFoundDescription {
+    margin: 1rem 0;
+    font-size: 2.2rem;
+}

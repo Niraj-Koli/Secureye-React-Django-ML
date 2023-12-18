@@ -1,14 +1,8 @@
 import { useState } from "react";
 
-import {
-    Container,
-    Box,
-    Grid,
-    TextField,
-    Link,
-    Typography,
-    Button,
-} from "@mui/material";
+import styles from "./Login.module.css";
+
+import { TextField, Link, Button } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -16,24 +10,30 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "features/authActions";
 
-const mainCardStyles = {
-    boxShadow: 3,
-    borderRadius: 2,
-    px: 4,
-    py: 4,
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-};
+import Navbar from "components/Navbar/Navbar";
 
 const loginButtonStyles = {
-    mt: 2.5,
-    mb: 2.5,
+    mt: 1.5,
+    mb: 1,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    bgcolor: "black.main",
     color: "white.main",
     ":hover": {
+        color: "white.main",
         bgcolor: "warning.main",
         transition: "all 0.3s ease-in",
+    },
+};
+
+const anchorsStyles = {
+    color: "black.main",
+    fontSize: "1.3rem",
+    textDecoration: "none",
+    mt: 1,
+    cursor: "pointer",
+    "&:hover": {
+        textDecoration: "underline",
     },
 };
 
@@ -70,14 +70,33 @@ function Login() {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Box sx={{ ...mainCardStyles }}>
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Login
-                    </Typography>
+            <section className={styles.loginContainer}>
+                <Navbar />
+            </section>
 
-                    <Box component="form" noValidate onSubmit={submitHandler}>
+            <div className={styles.mainCard}>
+                <div className={styles.loginCard}>
+                    <h1 className={styles.loginHeading}>Login</h1>
+
+                    <form
+                        className={styles.form}
+                        noValidate
+                        onSubmit={submitHandler}>
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                    textTransform: "lowercase",
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -85,12 +104,25 @@ function Login() {
                             name="email"
                             id="email"
                             type="email"
-                            color="sailorBlue"
+                            color="black"
                             value={email}
                             onChange={changeHandler}
                         />
 
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -98,44 +130,37 @@ function Login() {
                             name="password"
                             id="password"
                             type="password"
-                            color="sailorBlue"
+                            color="black"
                             value={password}
                             onChange={changeHandler}
                         />
 
                         <Button
-                            color="sailorBlue"
+                            sx={{ ...loginButtonStyles }}
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ ...loginButtonStyles }}
                             size="large">
                             Login
                         </Button>
 
-                        <Grid container>
-                            <Grid item xs>
-                                <Link
-                                    color="sailorBlue"
-                                    href="/reset-password"
-                                    variant="body2"
-                                    underline="hover">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link
-                                    color="sailorBlue"
-                                    href="/register"
-                                    variant="body2"
-                                    underline="hover">
-                                    {"Don't have an account? Signup"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
+                        <div className={styles.linkContainer}>
+                            <Link
+                                sx={{ ...anchorsStyles }}
+                                href="/reset-password"
+                                underline="hover">
+                                Forgot password?
+                            </Link>
+                            <Link
+                                sx={{ ...anchorsStyles }}
+                                href="/register"
+                                underline="hover">
+                                {"Don't have an account? Signup"}
+                            </Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </>
     );
 }

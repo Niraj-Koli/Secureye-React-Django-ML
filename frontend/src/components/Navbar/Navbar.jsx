@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import classes from "./Navbar.module.css";
-
-import { NavLink, Navigate } from "react-router-dom";
+import styles from "./Navbar.module.css";
 
 import { Button } from "@mui/material";
+
+import { NavLink, Navigate } from "react-router-dom";
 
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 
@@ -14,16 +14,15 @@ import { logout } from "features/authSlice";
 
 const logoStyles = {
     fontSize: 35,
-    marginRight: "0.5rem",
-    marginBottom: "-0.5rem",
+    mr: "0.5rem",
+    mb: "-1rem",
 };
 
-const credentialsButtonsStyles = {
-    fontSize: "1.2rem",
+const buttonStyles = {
+    fontSize: "1.7rem",
     fontWeight: "600",
-    margin: "0 0.8rem",
     borderRadius: "0.5rem",
-    padding: "0.4rem 1.3rem",
+    padding: "0.4rem 1.7rem",
     ":hover": {
         borderColor: "warning.main",
         bgcolor: "warning.main",
@@ -46,57 +45,69 @@ function Navbar() {
 
     return (
         <>
-            <header className={classes.header}>
-                <NavLink to="/" className={classes.logo}>
-                    <VisibilityRoundedIcon sx={{ ...logoStyles }} />
-                    <span>Secureye</span>
-                </NavLink>
-
-                <nav className={classes.navbar}>
-                    <NavLink to="/" className={classes.links}>
-                        About
+            <nav className={styles.navbar}>
+                <div className={styles.navContent}>
+                    <NavLink to="/" className={styles.brand}>
+                        <VisibilityRoundedIcon sx={{ ...logoStyles }} />
+                        <span>Secureye</span>
                     </NavLink>
-                    <NavLink to="/prediction" className={classes.links}>
+                </div>
+
+                <div className={styles.navList}>
+                    <NavLink to="/" className={styles.navItem}>
+                        Home
+                    </NavLink>
+                    <NavLink to="/demo" className={styles.navItem}>
+                        Demo
+                    </NavLink>
+                    <NavLink to="/prediction" className={styles.navItem}>
                         Prediction
                     </NavLink>
-                </nav>
+                    <NavLink to="/webcam" className={styles.navItem}>
+                        Webcam
+                    </NavLink>
+                </div>
 
-                <div className={classes.actions}>
+                <div className={styles.buttons}>
                     {!isAuthenticated ? (
                         <>
-                            <NavLink to="/login" className={classes.login}>
+                            <NavLink to="/login">
                                 <Button
-                                    variant="outlined"
-                                    color="sailorBlue"
-                                    sx={{ ...credentialsButtonsStyles }}>
+                                    variant="contained"
+                                    color="black"
+                                    sx={{
+                                        color: "white.main",
+                                        ...buttonStyles,
+                                    }}>
                                     Login
                                 </Button>
                             </NavLink>
-                            <NavLink to="/register" className={classes.signup}>
+                            <NavLink to="/register">
                                 <Button
                                     variant="contained"
-                                    color="sailorBlue"
+                                    color="black"
                                     sx={{
                                         color: "white.main",
-                                        ...credentialsButtonsStyles,
+                                        ...buttonStyles,
                                     }}>
                                     Signup
                                 </Button>
                             </NavLink>
                         </>
                     ) : (
-                        <NavLink to="/" className={classes.login}>
+                        <NavLink to="/">
                             <Button
-                                variant="outlined"
-                                color="sailorBlue"
-                                sx={{ ...credentialsButtonsStyles }}
+                                variant="contained"
+                                color="black"
+                                sx={{ color: "white.main", ...buttonStyles }}
                                 onClick={logoutUser}>
                                 Logout
                             </Button>
                         </NavLink>
                     )}
                 </div>
-            </header>
+            </nav>
+
             {redirect && <Navigate to="/" />}
         </>
     );

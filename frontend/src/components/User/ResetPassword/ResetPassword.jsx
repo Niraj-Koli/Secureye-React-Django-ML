@@ -2,38 +2,39 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import styles from "./ResetPassword.module.css";
+
+import Navbar from "components/Navbar/Navbar";
+
 import { useDispatch } from "react-redux";
 
 import { resetPassword } from "features/authActions";
 
-import {
-    Container,
-    Box,
-    Grid,
-    TextField,
-    Link,
-    Typography,
-    Button,
-} from "@mui/material";
-
-const mainCardStyles = {
-    boxShadow: 3,
-    borderRadius: 2,
-    px: 4,
-    py: 4,
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-};
+import { TextField, Link, Button } from "@mui/material";
 
 const resetButtonStyles = {
-    mt: 2.5,
-    mb: 2.5,
+    mt: 1.5,
+    mb: 1,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    bgcolor: "black.main",
     color: "white.main",
     ":hover": {
+        color: "white.main",
         bgcolor: "warning.main",
         transition: "all 0.3s ease-in",
+    },
+};
+
+const anchorsStyles = {
+    color: "black.main",
+    fontSize: "1.3rem",
+    textDecoration: "none",
+    mt: 1,
+    mx: "auto",
+    cursor: "pointer",
+    "&:hover": {
+        textDecoration: "underline",
     },
 };
 
@@ -70,14 +71,33 @@ function ResetPassword() {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Box sx={{ ...mainCardStyles }}>
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Reset Password
-                    </Typography>
+            <section className={styles.resetContainer}>
+                <Navbar />
+            </section>
 
-                    <Box component="form" noValidate onSubmit={submitHandler}>
+            <div className={styles.mainCard}>
+                <div className={styles.resetCard}>
+                    <h1 className={styles.resetHeading}>Reset Password</h1>
+
+                    <form
+                        className={styles.form}
+                        noValidate
+                        onSubmit={submitHandler}>
                         <TextField
+                            inputProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    fontWeight: 600,
+                                    textTransform: "lowercase",
+                                },
+                            }}
+                            InputLabelProps={{
+                                style: {
+                                    fontSize: "1.4rem",
+                                    width: "auto",
+                                    background: "white",
+                                },
+                            }}
                             margin="normal"
                             required
                             fullWidth
@@ -85,35 +105,31 @@ function ResetPassword() {
                             name="email"
                             id="email"
                             type="email"
-                            color="sailorBlue"
+                            color="black"
                             value={email}
                             onChange={changeHandler}
                         />
 
                         <Button
-                            color="sailorBlue"
+                            sx={{ ...resetButtonStyles }}
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ ...resetButtonStyles }}
                             size="large">
-                            Reset
+                            Reset Link
                         </Button>
 
-                        <Grid container>
-                            <Grid item margin="auto">
-                                <Link
-                                    color="sailorBlue"
-                                    href="/login"
-                                    variant="body2"
-                                    underline="hover">
-                                    {"Already have an account? Login"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
+                        <div className={styles.linkContainer}>
+                            <Link
+                                sx={{ ...anchorsStyles }}
+                                href="/login"
+                                underline="hover">
+                                {"Remembered Password? Login"}
+                            </Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </>
     );
 }

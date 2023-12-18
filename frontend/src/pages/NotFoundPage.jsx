@@ -4,7 +4,7 @@ import NotFound from "components/UI/NotFound/NotFound";
 function NotFoundPage() {
     return (
         <>
-            <Layout title="Not Found Page">
+            <Layout title="Secureye | Not Found Page">
                 <NotFound />
             </Layout>
         </>

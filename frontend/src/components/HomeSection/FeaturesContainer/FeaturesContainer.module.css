@@ -1,0 +1,20 @@
+.featuresHeading {
+    text-align: center;
+    padding: 2rem 0;
+    padding-bottom: 3rem;
+    font-size: 3rem;
+}
+
+.featuresHeading span {
+    background: #000000;
+    color: #fff;
+    display: inline-block;
+    padding: 0.7rem 4rem;
+    clip-path: polygon(100% 0, 93% 50%, 100% 99%, 0% 100%, 7% 50%, 0% 0%);
+}
+
+.boxContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    gap: 3rem;
+}

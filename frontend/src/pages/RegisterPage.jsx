@@ -4,7 +4,7 @@ import Register from "components/User/Register/Register";
 function RegisterPage() {
     return (
         <>
-            <Layout title="Register Page">
+            <Layout title="Secureye | Register Page">
                 <Register />s
             </Layout>
         </>
