@@ -57,9 +57,6 @@ function Navbar() {
                     <NavLink to="/" className={styles.navItem}>
                         Home
                     </NavLink>
-                    <NavLink to="/demo" className={styles.navItem}>
-                        Demo
-                    </NavLink>
                     <NavLink to="/prediction" className={styles.navItem}>
                         Prediction
                     </NavLink>

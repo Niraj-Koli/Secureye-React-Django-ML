@@ -13,9 +13,6 @@ const THEME = createTheme({
         fontFamily: "Montserrat",
     },
     palette: {
-        sailorBlue: {
-            main: "#00203f",
-        },
         white: {
             main: "#ffffff",
         },
