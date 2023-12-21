@@ -8,7 +8,7 @@ from .forms import ObjectDetectionForm
 from .models import PredictedImage
 
 model = YOLO(
-    "D:/Niru/Coding/Projects/Important/1/Secureye-React-Django-ML/backend/prediction/mlModel/best.pt"
+    "D:/Placements/Internships/Major Project Internship/FinalYearProject/Secureye-React-Django-ML/backend/prediction/mlModel/best.pt"
 )
 
 
@@ -28,7 +28,7 @@ def yolov8_prediction(request):
                 im_array = result.plot()
                 im = Image.fromarray(im_array[..., ::-1])
                 im.save(
-                    "D:/Niru/Coding/Projects/Important/1/Secureye-React-Django-ML/backend/media/results.jpg"
+                    "D:/Placements/Internships/Major Project Internship/FinalYearProject/Secureye-React-Django-ML/backend/media/results.jpg"
                 )
 
                 boxes = result.boxes.cpu().numpy()
@@ -39,7 +39,7 @@ def yolov8_prediction(request):
             predicted_image = PredictedImage.objects.create()
 
             with open(
-                "D:/Niru/Coding/Projects/Important/1/Secureye-React-Django-ML/backend/media/results.jpg",
+                "D:/Placements/Internships/Major Project Internship/FinalYearProject/Secureye-React-Django-ML/backend/media/results.jpg",
                 "rb",
             ) as file:
                 content = file.read()
