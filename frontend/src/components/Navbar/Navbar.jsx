@@ -57,8 +57,11 @@ function Navbar() {
                     <NavLink to="/" className={styles.navItem}>
                         Home
                     </NavLink>
-                    <NavLink to="/prediction" className={styles.navItem}>
-                        Prediction
+                    <NavLink to="/image" className={styles.navItem}>
+                        Image
+                    </NavLink>
+                    <NavLink to="/video" className={styles.navItem}>
+                        Video
                     </NavLink>
                     <NavLink to="/webcam" className={styles.navItem}>
                         Webcam

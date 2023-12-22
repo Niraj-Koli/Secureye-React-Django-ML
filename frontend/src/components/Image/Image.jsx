@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-import styles from "./Prediction.module.css";
+import styles from "./Image.module.css";
 
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
@@ -12,7 +12,8 @@ import defaultImage from "static/img/default.jpg";
 const uploadButtons = {
     fontSize: "1.5rem",
     fontWeight: "600",
-    m: "4rem",
+    m: "3rem",
+    width: "40%",
     backgroundColor: "black.main",
     color: "white.main",
     borderRadius: "0.5rem",
@@ -106,7 +107,7 @@ function Prediction() {
 
     return (
         <>
-            <section className={styles.predictionContainer}>
+            <section className={styles.imageContainer}>
                 <Navbar />
             </section>
 
@@ -123,13 +124,6 @@ function Prediction() {
                             onChange={imageChangeHandler}
                             hidden
                         />
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        component="label"
-                        sx={{ ...uploadButtons }}>
-                        Video
-                        <input type="file" hidden />
                     </Button>
                 </div>
             </div>

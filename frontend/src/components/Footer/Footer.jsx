@@ -80,13 +80,13 @@ function Footer() {
 
                     <div className={styles.navigation}>
                         <h1 className={styles.heading}>Navigate</h1>
-                        <NavLink to="/" className={styles.links}>
+                        <NavLink to="/image" className={styles.links}>
                             <LaunchSharpIcon sx={{ ...footerIconStyles }} />
-                            Home
+                            Image
                         </NavLink>
-                        <NavLink to="/prediction" className={styles.links}>
+                        <NavLink to="/video" className={styles.links}>
                             <LaunchSharpIcon sx={{ ...footerIconStyles }} />
-                            Prediction
+                            Video
                         </NavLink>
                         <NavLink to="/webcam" className={styles.links}>
                             <LaunchSharpIcon sx={{ ...footerIconStyles }} />
