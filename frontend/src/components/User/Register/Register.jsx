@@ -10,7 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signup } from "features/authActions";
 
-import { TextField, Link, Button } from "@mui/material";
+import {
+    TextField,
+    Link,
+    Button,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
+
+import Modal from "components/UI/Modal/Modal";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const signupButtonStyles = {
     mt: 1.5,
@@ -38,18 +48,36 @@ const anchorsStyles = {
     },
 };
 
+const showPasswordStyles = {
+    fontSize: "3rem",
+    fontWeight: 600,
+    color: "black.main",
+};
+
+const isUsername = (value) => /^[a-zA-Z0-9 ]+$/.test(value);
+const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const isPassword = (value) => value.length > 7;
+
 function Register() {
     const navigate = useNavigate();
 
-    const [accountCreated, setAccountCreated] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
+    const [successModal, setSuccessModal] = useState(false);
+
+    const [userInputsValidity, setUserInputsValidity] = useState({
+        username: true,
+        email: true,
+        password: true,
+    });
 
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
+        showPassword: false,
     });
 
-    const { name, email, password } = formData;
+    const { name, email, password, showPassword } = formData;
 
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -59,19 +87,44 @@ function Register() {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
+    const togglePasswordVisibility = () => {
+        setFormData({
+            ...formData,
+            showPassword: !showPassword,
+        });
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
 
-        dispatch(signup({ name, email, password }));
-        setAccountCreated(true);
+        const isUsernameValid = isUsername(name);
+        const isEmailValid = isEmail(email);
+        const isPasswordValid = isPassword(password);
+
+        setUserInputsValidity({
+            username: isUsernameValid,
+            email: isEmailValid,
+            password: isPasswordValid,
+        });
+
+        if (isUsernameValid && isEmailValid && isPasswordValid) {
+            dispatch(signup({ name, email, password }));
+            setSuccessModal(true);
+        } else {
+            setErrorModal(true);
+        }
+    };
+
+    const closeErrorModalHandler = () => setErrorModal(false);
+
+    const closeSuccessModalHandler = () => {
+        setSuccessModal(false);
+
+        navigate("/login");
     };
 
     if (isAuthenticated) {
         navigate("/");
-    }
-
-    if (accountCreated) {
-        navigate("/login");
     }
 
     return (
@@ -93,6 +146,7 @@ function Register() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
+                                    textTransform: "capitalize",
                                 },
                             }}
                             InputLabelProps={{
@@ -118,7 +172,7 @@ function Register() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
-                                    textTransform: "lowercase",
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -145,6 +199,7 @@ function Register() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -160,10 +215,33 @@ function Register() {
                             label="Password"
                             name="password"
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             color="black"
                             value={password}
                             onChange={changeHandler}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={togglePasswordVisibility}
+                                            edge="end">
+                                            {showPassword ? (
+                                                <VisibilityOff
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Button
@@ -186,6 +264,66 @@ function Register() {
                     </form>
                 </div>
             </div>
+
+            {errorModal && (
+                <Modal onClose={closeErrorModalHandler}>
+                    <div className={styles.errorModal}>
+                        {!userInputsValidity.username && (
+                            <div className={styles.errorMessage}>
+                                Enter a username!
+                            </div>
+                        )}
+
+                        {!userInputsValidity.email && (
+                            <div className={styles.errorMessage}>
+                                Enter a valid email address!
+                            </div>
+                        )}
+
+                        {!userInputsValidity.password && (
+                            <div className={styles.errorMessage}>
+                                Password must be 8 characters long.
+                            </div>
+                        )}
+                        <Button
+                            sx={{ ...signupButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeErrorModalHandler}>
+                            Close
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
+            {successModal && (
+                <Modal onClose={closeSuccessModalHandler}>
+                    <div className={styles.successModal}>
+                        <div className={styles.successMessage}>
+                            Your account has been successfully created!
+                        </div>
+                        <div className={styles.successMessage}>
+                            A confirmation link has been sent to your Gmail for
+                            account activation.
+                        </div>
+                        <div className={styles.successMessage}>
+                            Please check your email and follow the instructions
+                            to activate your account.
+                        </div>
+                        <Button
+                            sx={{ ...signupButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeSuccessModalHandler}>
+                            Okay
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </>
     );
 }

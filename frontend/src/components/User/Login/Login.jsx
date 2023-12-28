@@ -2,11 +2,21 @@ import { useState } from "react";
 
 import styles from "./Login.module.css";
 
-import { TextField, Link, Button } from "@mui/material";
+import Modal from "components/UI/Modal/Modal";
+
+import {
+    TextField,
+    Link,
+    Button,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useNavigate } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { login } from "features/authActions";
 
@@ -37,17 +47,28 @@ const anchorsStyles = {
     },
 };
 
+const showPasswordStyles = {
+    fontSize: "3rem",
+    fontWeight: 600,
+    color: "black.main",
+};
+
+const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const isPassword = (value) => value.length > 7;
+
 function Login() {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
+        showPassword: false,
     });
+
+    const [errorModal, setErrorModal] = useState(false);
+    const [successModal, setSuccessModal] = useState(false);
 
     const navigate = useNavigate();
 
-    const { email, password } = formData;
-
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const { email, password, showPassword } = formData;
 
     const dispatch = useDispatch();
 
@@ -58,15 +79,37 @@ function Login() {
         });
     };
 
+    const togglePasswordVisibility = () => {
+        setFormData({
+            ...formData,
+            showPassword: !showPassword,
+        });
+    };
+
+    const closeErrorModalHandler = () => {
+        setErrorModal(false);
+    };
+
+    const closeSuccessModalHandler = () => {
+        setSuccessModal(false);
+
+        navigate("/");
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
 
-        dispatch(login({ email, password }));
-    };
+        const isEmailValid = isEmail(email);
+        const isPasswordValid = isPassword(password);
 
-    if (isAuthenticated) {
-        navigate("/");
-    }
+        if (isEmailValid && isPasswordValid) {
+            dispatch(login({ email, password }));
+
+            setSuccessModal(true);
+        } else {
+            setErrorModal(true);
+        }
+    };
 
     return (
         <>
@@ -87,7 +130,7 @@ function Login() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
-                                    textTransform: "lowercase",
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -114,6 +157,7 @@ function Login() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -129,10 +173,33 @@ function Login() {
                             label="Password"
                             name="password"
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             color="black"
                             value={password}
                             onChange={changeHandler}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={togglePasswordVisibility}
+                                            edge="end">
+                                            {showPassword ? (
+                                                <VisibilityOff
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Button
@@ -161,6 +228,44 @@ function Login() {
                     </form>
                 </div>
             </div>
+
+            {errorModal && (
+                <Modal onClose={closeErrorModalHandler}>
+                    <div className={styles.errorModal}>
+                        <div className={styles.errorMessage}>
+                            Login failed. Please check your credentials.
+                        </div>
+                        <Button
+                            sx={{ ...loginButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeErrorModalHandler}>
+                            Close
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
+            {successModal && (
+                <Modal onClose={closeSuccessModalHandler}>
+                    <div className={styles.successModal}>
+                        <div className={styles.successMessage}>
+                            Login successful. Have fun.
+                        </div>
+                        <Button
+                            sx={{ ...loginButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeSuccessModalHandler}>
+                            Redirect
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </>
     );
 }

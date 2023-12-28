@@ -10,7 +10,11 @@ import { useDispatch } from "react-redux";
 
 import { resetPasswordConfirm } from "features/authActions";
 
-import { Button, TextField } from "@mui/material";
+import { TextField, Button, IconButton, InputAdornment } from "@mui/material";
+
+import Modal from "components/UI/Modal/Modal";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const updateButtonStyles = {
     mt: 1.5,
@@ -26,44 +30,89 @@ const updateButtonStyles = {
     },
 };
 
+const showPasswordStyles = {
+    fontSize: "3rem",
+    fontWeight: 600,
+    color: "black.main",
+};
+
+const isPassword = (value) => value.length > 7;
+const isPasswordEqual = (password1, password2) => password1 === password2;
+
 function UpdatePassword() {
     const { uid, token } = useParams();
 
     const navigate = useNavigate();
 
-    const [requestSent, setRequestSent] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
+    const [successModal, setSuccessModal] = useState(false);
 
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [formData, setFormData] = useState({
+        newPassword: "",
+        confirmPassword: "",
+        showNewPassword: false,
+        showConfirmPassword: false,
+    });
+
+    const {
+        newPassword,
+        confirmPassword,
+        showNewPassword,
+        showConfirmPassword,
+    } = formData;
 
     const dispatch = useDispatch();
 
-    const newPasswordChangeHandler = (event) => {
-        setNewPassword(event.target.value);
+    const changeHandler = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
-    const confirmPasswordChangeHandler = (event) => {
-        setConfirmPassword(event.target.value);
+    const toggleNewPasswordVisibility = () => {
+        setFormData({
+            ...formData,
+            showNewPassword: !showNewPassword,
+        });
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setFormData({
+            ...formData,
+            showConfirmPassword: !showConfirmPassword,
+        });
     };
 
     const submitHandler = (event) => {
         event.preventDefault();
 
-        dispatch(
-            resetPasswordConfirm({
-                uid,
-                token,
-                new_password: newPassword,
-                re_new_password: confirmPassword,
-            })
+        const isPassword1Valid = isPassword(newPassword);
+        const isPassword2Valid = isPassword(confirmPassword);
+        const arePasswordsEquals = isPasswordEqual(
+            newPassword,
+            confirmPassword
         );
 
-        setRequestSent(true);
+        if (isPassword1Valid && isPassword2Valid && arePasswordsEquals) {
+            dispatch(
+                resetPasswordConfirm({
+                    uid,
+                    token,
+                    new_password: newPassword,
+                    re_new_password: confirmPassword,
+                })
+            );
+            setSuccessModal(true);
+        } else {
+            setErrorModal(true);
+        }
     };
 
-    if (requestSent) {
-        navigate("/");
-    }
+    const closeErrorModalHandler = () => setErrorModal(false);
+
+    const closeSuccessModalHandler = () => {
+        setSuccessModal(false);
+
+        navigate("/login");
+    };
 
     return (
         <>
@@ -73,8 +122,7 @@ function UpdatePassword() {
 
             <div className={styles.mainCard}>
                 <div className={styles.updateCard}>
-                    <h1 className={styles.updateHeading}>Update Password</h1>
-
+                    <h1 className={styles.updateHeading}>Change Password</h1>
                     <form
                         className={styles.form}
                         noValidate
@@ -84,6 +132,7 @@ function UpdatePassword() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -97,12 +146,37 @@ function UpdatePassword() {
                             required
                             fullWidth
                             label="Password"
-                            name="password"
+                            name="newPassword"
                             id="password"
-                            type="password"
+                            type={showNewPassword ? "text" : "password"}
                             color="black"
                             value={newPassword}
-                            onChange={newPasswordChangeHandler}
+                            onChange={changeHandler}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={
+                                                toggleNewPasswordVisibility
+                                            }
+                                            edge="end">
+                                            {showNewPassword ? (
+                                                <VisibilityOff
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <TextField
@@ -110,6 +184,7 @@ function UpdatePassword() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -123,12 +198,37 @@ function UpdatePassword() {
                             required
                             fullWidth
                             label="Confirm Password"
-                            name="confirmpassword"
+                            name="confirmPassword"
                             id="confirmpassword"
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
                             color="black"
                             value={confirmPassword}
-                            onChange={confirmPasswordChangeHandler}
+                            onChange={changeHandler}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={
+                                                toggleConfirmPasswordVisibility
+                                            }
+                                            edge="end">
+                                            {showConfirmPassword ? (
+                                                <VisibilityOff
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{
+                                                        ...showPasswordStyles,
+                                                    }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Button
@@ -137,11 +237,49 @@ function UpdatePassword() {
                             fullWidth
                             variant="contained"
                             size="large">
-                            Update
+                            Change
                         </Button>
                     </form>
                 </div>
             </div>
+
+            {errorModal && (
+                <Modal onClose={closeErrorModalHandler}>
+                    <div className={styles.errorModal}>
+                        <div className={styles.errorMessage}>
+                            Passwords does not match.
+                        </div>
+                        <Button
+                            sx={{ ...updateButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeErrorModalHandler}>
+                            Close
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
+            {successModal && (
+                <Modal onClose={closeSuccessModalHandler}>
+                    <div className={styles.successModal}>
+                        <div className={styles.successMessage}>
+                            Password Changed! You can login.
+                        </div>
+                        <Button
+                            sx={{ ...updateButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeSuccessModalHandler}>
+                            Login
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </>
     );
 }

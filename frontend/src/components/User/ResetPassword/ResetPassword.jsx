@@ -12,6 +12,8 @@ import { resetPassword } from "features/authActions";
 
 import { TextField, Link, Button } from "@mui/material";
 
+import Modal from "components/UI/Modal/Modal";
+
 const resetButtonStyles = {
     mt: 1.5,
     mb: 1,
@@ -38,8 +40,11 @@ const anchorsStyles = {
     },
 };
 
+const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
 function ResetPassword() {
-    const [requestSent, setRequestSent] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
+    const [successModal, setSuccessModal] = useState(false);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -61,13 +66,26 @@ function ResetPassword() {
     const submitHandler = (event) => {
         event.preventDefault();
 
-        dispatch(resetPassword(email));
-        setRequestSent(true);
+        const isEmailValid = isEmail(email);
+
+        if (isEmailValid) {
+            const res = dispatch(resetPassword(email));
+
+            console.log(res);
+
+            setSuccessModal(true);
+        } else {
+            setErrorModal(true);
+        }
     };
 
-    if (requestSent) {
-        navigate("/");
-    }
+    const closeErrorModalHandler = () => setErrorModal(false);
+
+    const closeSuccessModalHandler = () => {
+        setSuccessModal(false);
+
+        navigate("/login");
+    };
 
     return (
         <>
@@ -88,7 +106,7 @@ function ResetPassword() {
                                 style: {
                                     fontSize: "1.4rem",
                                     fontWeight: 600,
-                                    textTransform: "lowercase",
+                                    textTransform: "none",
                                 },
                             }}
                             InputLabelProps={{
@@ -130,6 +148,45 @@ function ResetPassword() {
                     </form>
                 </div>
             </div>
+
+            {errorModal && (
+                <Modal onClose={closeErrorModalHandler}>
+                    <div className={styles.errorModal}>
+                        <div className={styles.errorMessage}>
+                            Enter a valid email address!
+                        </div>
+                        <Button
+                            sx={{ ...resetButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeErrorModalHandler}>
+                            Close
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
+            {successModal && (
+                <Modal onClose={closeSuccessModalHandler}>
+                    <div className={styles.successModal}>
+                        <div className={styles.successMessage}>
+                            An email with instructions to reset your password
+                            has been sent. Please check your email.
+                        </div>
+                        <Button
+                            sx={{ ...resetButtonStyles }}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            onClick={closeSuccessModalHandler}>
+                            Okay
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </>
     );
 }

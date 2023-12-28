@@ -7,8 +7,6 @@ import Footer from "components/Footer/Footer";
 
 import { Button } from "@mui/material";
 
-import defaultImage from "static/img/default.jpg";
-
 const uploadButtons = {
     fontSize: "1.5rem",
     fontWeight: "600",
@@ -26,25 +24,50 @@ const uploadButtons = {
     },
 };
 
-
 function Webcam() {
-    const videoRef = useRef(null);
-    const [video, setVideo] = useState("");
+    const webcamRef = useRef(null);
+    const [webcam, setVideo] = useState("");
 
-    const videoClickHandler = () => {
-        videoRef.current.click();
+    const webcamClickHandler = () => {
+        webcamRef.current.click();
     };
 
-    const videoChangeHandler = (event) => {
+    const webcamChangeHandler = (event) => {
         const file = event.target.files[0];
         setVideo(file);
     };
 
     return (
         <>
-            <section className={styles.videoContainer}>
+            <section className={styles.webcamContainer}>
                 <Navbar />
             </section>
+
+            <div className={styles.mainPredictionCard}>
+                <div className={styles.predictionCard}>
+                    <div className={styles.webcamSection}>
+                        <input
+                            type="file"
+                            ref={webcamRef}
+                            style={{ display: "none" }}
+                            onChange={webcamChangeHandler}
+                        />
+                        <div
+                            className={styles.webcamStyles}
+                            onClick={webcamClickHandler}>
+                            {webcam ? (
+                                <img
+                                    src={URL.createObjectURL(webcam)}
+                                    alt="Prediction"
+                                    className={styles.webcam}
+                                />
+                            ) : (
+                                <div className={styles.webcam} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div className={styles.mainButtonsCard}>
                 <div className={styles.buttonsCard}>
@@ -55,41 +78,11 @@ function Webcam() {
                         Webcam
                         <input
                             type="file"
-                            ref={videoRef}
-                            onChange={videoChangeHandler}
+                            ref={webcamRef}
+                            onChange={webcamChangeHandler}
                             hidden
                         />
                     </Button>
-                </div>
-            </div>
-
-            <div className={styles.mainPredictionCard}>
-                <div className={styles.predictionCard}>
-                    <div className={styles.videoSection}>
-                        <input
-                            type="file"
-                            ref={videoRef}
-                            style={{ display: "none" }}
-                            onChange={videoChangeHandler}
-                        />
-                        <div
-                            className={styles.videoStyles}
-                            onClick={videoClickHandler}>
-                            {video ? (
-                                <img
-                                    src={URL.createObjectURL(video)}
-                                    alt="Prediction"
-                                    className={styles.video}
-                                />
-                            ) : (
-                                <img
-                                    src={defaultImage}
-                                    alt="Default"
-                                    className={styles.video}
-                                />
-                            )}
-                        </div>
-                    </div>
                 </div>
             </div>
 

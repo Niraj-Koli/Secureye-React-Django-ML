@@ -22,7 +22,7 @@ export const loadUser = createAsyncThunk(
                     config
                 );
 
-                return res.data;
+                return res;
             } catch (error) {
                 throw error;
             }
@@ -84,8 +84,11 @@ export const login = createAsyncThunk(
                 body,
                 config
             );
+
             thunkAPI.dispatch(loginSuccess(res.data));
             thunkAPI.dispatch(loadUser());
+
+            return res;
         } catch (err) {
             throw err;
         }
@@ -113,6 +116,7 @@ export const signup = createAsyncThunk(
                 body,
                 config
             );
+
             return res.data;
         } catch (err) {
             throw err;
@@ -156,12 +160,16 @@ export const resetPassword = createAsyncThunk(
         const body = JSON.stringify({ email });
 
         try {
-            await axios.post(
+            const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/auth/users/reset_password/`,
                 body,
                 config
             );
-            return true;
+
+            console.log(response);
+            console.log(response.data);
+
+            return response;
         } catch (err) {
             throw err;
         }

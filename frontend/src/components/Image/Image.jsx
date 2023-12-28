@@ -1,13 +1,19 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 import styles from "./Image.module.css";
 
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 
-import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-import defaultImage from "static/img/default.jpg";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setImage } from "features/predictionSlice";
+
+import { submitImage } from "features/predictionActions";
+
+import { Button, CircularProgress } from "@mui/material";
 
 const uploadButtons = {
     fontSize: "1.5rem",
@@ -42,27 +48,26 @@ const predictButton = {
     },
 };
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-                cookieValue = decodeURIComponent(
-                    cookie.substring(name.length + 1)
-                );
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
 function Prediction() {
     const imageRef = useRef(null);
-    const [image, setImage] = useState("");
-    const [predictedImageUrl, setPredictedImageUrl] = useState(null);
+
+    const navigate = useNavigate();
+
+    const [loadingSpinner, setLoadingSpinner] = useState(false);
+    const [showPredictedObjects, setShowPredictedObjects] = useState(false);
+
+    const dispatch = useDispatch();
+
+    const image = useSelector((state) => state.prediction.image);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const predictedImageUrl = useSelector(
+        (state) => state.prediction.predictedImageUrl
+    );
+
+    const detectedClasses = useSelector(
+        (state) => state.prediction.detectedClasses
+    );
 
     const imageClickHandler = () => {
         imageRef.current.click();
@@ -70,40 +75,27 @@ function Prediction() {
 
     const imageChangeHandler = (event) => {
         const file = event.target.files[0];
-        setImage(file);
+        dispatch(setImage(file));
     };
 
-    async function submitImage() {
-        const formData = new FormData();
-        formData.append("image", image);
+    const redirectHandler = () => {
+        navigate("/login");
+    };
 
-        const csrftoken = getCookie("csrftoken");
+    const submitImageHandler = async () => {
+        setLoadingSpinner(true);
 
         try {
-            const response = await fetch(
-                "http://127.0.0.1:8000/api/prediction/",
-                {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": csrftoken,
-                    },
-                    body: formData,
-                }
-            );
+            const formData = new FormData();
+            formData.append("image", image);
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Response data:", data);
-                setPredictedImageUrl(data.image_url);
-                // Log the URL of the predicted image
-                console.log("Predicted image URL:", data.image_url);
-            } else {
-                console.error("Failed to upload image");
-            }
+            await dispatch(submitImage(formData));
         } catch (error) {
-            console.error("Error uploading image", error);
+        } finally {
+            setLoadingSpinner(false);
+            setShowPredictedObjects(true);
         }
-    }
+    };
 
     return (
         <>
@@ -147,11 +139,7 @@ function Prediction() {
                                     className={styles.image}
                                 />
                             ) : (
-                                <img
-                                    src={defaultImage}
-                                    alt="Default"
-                                    className={styles.image}
-                                />
+                                <div className={styles.image} />
                             )}
                         </div>
                     </div>
@@ -167,11 +155,7 @@ function Prediction() {
                                     className={styles.image}
                                 />
                             ) : (
-                                <img
-                                    src={defaultImage}
-                                    alt="Default"
-                                    className={styles.image}
-                                />
+                                <div className={styles.image} />
                             )}
                         </div>
                     </div>
@@ -179,20 +163,46 @@ function Prediction() {
             </div>
 
             <div className={styles.predictionResultCard}>
-                <div className={styles.resultCard}>
-                    <Button
-                        variant="outlined"
-                        component="label"
-                        sx={{ ...predictButton }}
-                        onClick={submitImage}>
-                        Predict
-                    </Button>
-                </div>
-                <div className={styles.resultItemsCard}>
-                    <h1 className={styles.predictedResultHeading}>
-                        <span>Predicted Objects</span>
-                    </h1>
-                </div>
+                {loadingSpinner ? (
+                    <CircularProgress size={80} color="secondary" />
+                ) : (
+                    <div className={styles.resultCard}>
+                        {isAuthenticated ? (
+                            <Button
+                                variant="outlined"
+                                component="label"
+                                sx={{ ...predictButton }}
+                                onClick={submitImageHandler}
+                                disabled={loadingSpinner}>
+                                Predict
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outlined"
+                                component="label"
+                                sx={{ ...predictButton }}
+                                onClick={redirectHandler}>
+                                Login
+                            </Button>
+                        )}
+                    </div>
+                )}
+                {showPredictedObjects && (
+                    <div className={styles.resultItemsCard}>
+                        <h1 className={styles.predictedResultHeading}>
+                            <span>Predicted Objects</span>
+                        </h1>
+                        <ul className={styles.classesList}>
+                            {detectedClasses.map((className, index) => (
+                                <li
+                                    key={index}
+                                    className={styles.predictedItems}>
+                                    {className}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
 
             <Footer />

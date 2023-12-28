@@ -49,3 +49,34 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.errorModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2.5rem 4rem 2rem;
+}
+
+.errorMessage {
+    color: #ff1744;
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+
+.successModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2.5rem 4rem 2rem;
+}
+
+.successMessage {
+    text-align: center;
+    color: #00e676;
+    font-size: 1.7rem;
+    font-weight: 600;
+}

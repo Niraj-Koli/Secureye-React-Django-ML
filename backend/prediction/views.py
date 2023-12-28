@@ -14,6 +14,9 @@ model = YOLO(
 
 @csrf_exempt
 def yolov8_prediction(request):
+    detected_classes = []
+    predicted_image = None
+    
     if request.method == "POST":
         form = ObjectDetectionForm(request.POST, request.FILES)
 
@@ -21,8 +24,6 @@ def yolov8_prediction(request):
             image = form.save()
 
             results = model.predict(source=image.image.path, conf=0.5)
-
-            detected_classes = []
 
             for result in results:
                 im_array = result.plot()

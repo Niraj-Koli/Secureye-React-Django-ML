@@ -25,7 +25,7 @@ function Activation() {
     }, [dispatch, uid, token]);
 
     if (verified) {
-        navigate("/");
+        navigate("/login");
     }
 
     return (

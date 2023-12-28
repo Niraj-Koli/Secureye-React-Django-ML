@@ -7,8 +7,6 @@ import Footer from "components/Footer/Footer";
 
 import { Button } from "@mui/material";
 
-import defaultImage from "static/img/default.jpg";
-
 const uploadButtons = {
     fontSize: "1.5rem",
     fontWeight: "600",
@@ -97,11 +95,7 @@ function Video() {
                                     className={styles.video}
                                 />
                             ) : (
-                                <img
-                                    src={defaultImage}
-                                    alt="Default"
-                                    className={styles.video}
-                                />
+                                <div className={styles.video} />
                             )}
                         </div>
                     </div>
@@ -113,8 +107,7 @@ function Video() {
                     <Button
                         variant="outlined"
                         component="label"
-                        sx={{ ...predictButton }}
-                 >
+                        sx={{ ...predictButton }}>
                         Predict
                     </Button>
                 </div>

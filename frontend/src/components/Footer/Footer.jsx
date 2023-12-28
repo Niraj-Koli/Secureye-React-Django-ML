@@ -63,7 +63,7 @@ function Footer() {
                             <LocalPhoneRoundedIcon
                                 sx={{ ...footerIconStyles }}
                             />
-                            +91-9999999999
+                            +91-9786543210
                         </div>
                         <div className={styles.links}>
                             <EmailRoundedIcon sx={{ ...footerIconStyles }} />
